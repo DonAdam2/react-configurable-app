@@ -1,0 +1,24 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+{{#if cssModules}}
+    //styles
+    import styles from './{{pascalCase name}}.scss';
+{{/if}}
+
+const {{pascalCase name}} = (props) => {
+    return (
+        {{#if cssModules}}
+            <div  className={styles.{{camelCase name}}Wrapper}>
+        {{else}}
+            <div  className="{{camelCase name}}Wrapper">
+        {{/if}}
+            {{pascalCase name}}
+        </div>
+    );
+};
+
+{{pascalCase name}}.propTypes = {
+
+};
+
+export default {{pascalCase name}};

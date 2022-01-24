@@ -4,7 +4,6 @@ const { merge } = require('webpack-merge'),
 	glob = require('glob'),
 	//plugins
 	MiniCssExtractPlugin = require('mini-css-extract-plugin'),
-	PurgeCSSPlugin = require('purgecss-webpack-plugin'),
 	CssMinimizerPlugin = require('css-minimizer-webpack-plugin'),
 	TerserJSPlugin = require('terser-webpack-plugin'),
 	{ CleanWebpackPlugin } = require('clean-webpack-plugin'),
@@ -43,10 +42,6 @@ module.exports = (env, options) => {
 				filename: cssSubDirectory + '[name].[contenthash:8].css',
 				// used for the lazy loaded component
 				chunkFilename: cssSubDirectory + '[id].[contenthash:8].css',
-			}),
-			// remove un-used styles
-			new PurgeCSSPlugin({
-				paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true }),
 			}),
 		],
 	});

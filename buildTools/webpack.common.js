@@ -14,6 +14,7 @@ const path = require('path'),
 		port,
 		devServer,
 		jsSubDirectory,
+		isCssModules,
 		metaInfo: { title, description, url, keywords },
 	} = require('./constants'),
 	PATHS = require('./paths'),
@@ -39,7 +40,7 @@ module.exports = (env, options) => {
 	/*================ finish setup environments variables ===================*/
 
 	return {
-		entry: `${PATHS.src}/index.js`,
+		entry: `${PATHS.src}/index.tsx`,
 		output: {
 			// __dirname is the absolute path to the root directory of our app
 			path: PATHS.outputSrc,
@@ -69,10 +70,7 @@ module.exports = (env, options) => {
 			},
 		},
 		resolve: {
-			extensions: ['*', '.js', '.jsx', '.json'],
-			fallback: {
-				crypto: false,
-			},
+			extensions: ['.js', '.ts', '.tsx', '.json'],
 		},
 		module: {
 			rules: [
@@ -85,12 +83,16 @@ module.exports = (env, options) => {
 					},
 				},
 				{
+					test: /\.(ts|tsx)$/,
+					use: ['ts-loader'],
+					exclude: /node_modules/,
+				},
+				{
 					test: /\.(jpe?g|svg|png|gif|ico|eot|ttf|woff2?)(\?v=\d+\.\d+\.\d+)?$/i,
 					type: 'asset/resource',
 				},
 				{
 					test: /\.s?[ac]ss$/,
-					exclude: /node_modules/,
 					use: [
 						{
 							// style-loader => insert styles in the head of the HTML as style tags or in blob links
@@ -107,19 +109,23 @@ module.exports = (env, options) => {
 								// Number of loaders applied before CSS loader (which is postcss-loader)
 								importLoaders: 3,
 								// the following is used to enable CSS modules
-								/*modules: {
-									mode: (resourcePath) => {
-										if (/global.scss$/i.test(resourcePath)) {
-											return 'global';
-										}
+								...(isCssModules
+									? {
+											modules: {
+												mode: (resourcePath) => {
+													if (/global.scss$/i.test(resourcePath)) {
+														return 'global';
+													}
 
-										return 'local';
-									},
-									localIdentName: isDevelopment ? '[name]_[local]' : '[contenthash:base64]',
-									localIdentContext: PATHS.src,
-									localIdentHashSalt: 'react-boilerplate',
-									exportLocalsConvention: 'camelCaseOnly',
-								},*/
+													return 'local';
+												},
+												localIdentName: isDevelopment ? '[name]_[local]' : '[contenthash:base64]',
+												localIdentContext: PATHS.src,
+												localIdentHashSalt: 'react-boilerplate',
+												exportLocalsConvention: 'camelCaseOnly',
+											},
+									  }
+									: {}),
 							},
 						},
 						{
@@ -127,7 +133,22 @@ module.exports = (env, options) => {
 							options: {
 								postcssOptions: {
 									ident: 'postcss',
-									plugins: [autoprefixer()],
+									plugins: [
+										'postcss-flexbugs-fixes',
+										[
+											'postcss-preset-env',
+											{
+												autoprefixer: {
+													flexbox: 'no-2009',
+												},
+												stage: 3,
+											},
+										],
+										// Adds PostCSS Normalize as the reset css with default options,
+										// so that it honors browserslist config in package.json
+										// which in turn let's users customize the target behavior as per their needs.
+										'postcss-normalize',
+									],
 								},
 								sourceMap: isDevelopment,
 							},
@@ -153,7 +174,7 @@ module.exports = (env, options) => {
 		},
 		plugins: [
 			new EsLintPlugin({
-				extensions: ['.js', '.jsx'],
+				extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
 			}),
 			new HtmlWebpackPlugin({
 				title,

@@ -1,3 +1,6 @@
+const { isCssModules, rootDirectory } = require('./buildTools/constants'),
+	fs = require('fs');
+
 const requireField = (fieldName) => {
 	return (value) => {
 		if (String(value).length === 0) {
@@ -7,60 +10,90 @@ const requireField = (fieldName) => {
 	};
 };
 
+const startsWithUseKeyWord = () => {
+	return (value) => {
+		if (String(value).startsWith('use')) {
+			return true;
+		}
+		return 'Custom hooks should start with use keyword';
+	};
+};
+
+const isStoreEntityExist = (entityName) =>
+	fs.existsSync(`./${rootDirectory}/ts/store/${entityName}`);
+
+const createQuestion = (type) => {
+	const isReducer = type === 'reducer',
+		isHook = type === 'hook';
+
+	if (isReducer) {
+		return [
+			{
+				type: 'input',
+				name: 'reducerEntity',
+				message: `What is your entity name (directory in store)?`,
+				validate: requireField('reducerEntity'),
+			},
+			{
+				type: 'input',
+				name: 'name',
+				message: `What is your ${type} name?`,
+				validate: requireField('name'),
+			},
+		];
+	} else {
+		return {
+			// Raw text input
+			type: 'input',
+			// Variable name for this input
+			name: 'name',
+			// Prompt to display on command line
+			message: `What is your ${type} name?`,
+			// make sure that name is not empty
+			validate: isHook ? requireField('name') && startsWithUseKeyWord() : requireField('name'),
+		};
+	}
+};
+
 module.exports = (plop) => {
 	plop.setGenerator('component', {
 		description: 'Create a component',
 		// User input prompts provided as arguments to the template
-		prompts: [
-			{
-				// Raw text input
-				type: 'input',
-				// Variable name for this input
-				name: 'name',
-				// Prompt to display on command line
-				message: 'What is your component name?',
-				// make sure that component name is not empty
-				validate: requireField('name'),
-			},
-			{
-				type: 'confirm',
-				name: 'cssModules',
-				message: 'Did you enable CSS modules?',
-			},
-		],
-		actions: function (data) {
+		prompts: [createQuestion('component')],
+		actions: function () {
 			let actionsList = [
 				{
 					// Add a new file
 					type: 'add',
 					// Path for the new file
-					path: 'src/js/components/{{pascalCase name}}/{{pascalCase name}}.jsx',
+					path: `${rootDirectory}/ts/components/{{pascalCase name}}/{{pascalCase name}}.tsx`,
 					// Handlebars template used to generate content of new file
 					templateFile: 'generatorTemplates/component/Component.js.hbs',
+					data: { isCssModules },
 				},
 				{
 					type: 'add',
-					path: 'src/test/components/{{pascalCase name}}.test.js',
+					path: `${rootDirectory}/ts/components/{{pascalCase name}}/{{pascalCase name}}.test.tsx`,
 					templateFile: 'generatorTemplates/component/Component.test.js.hbs',
 				},
 			];
 
-			if (data.cssModules) {
+			if (isCssModules) {
 				actionsList.push({
 					type: 'add',
-					path: 'src/js/components/{{pascalCase name}}/{{pascalCase name}}.scss',
+					path: `${rootDirectory}/ts/components/{{pascalCase name}}/{{pascalCase name}}.scss`,
 					templateFile: 'generatorTemplates/component/Component.scss.hbs',
 				});
 			} else {
 				actionsList.push(
 					{
 						type: 'add',
-						path: 'src/scss/components/_{{dashCase name}}.scss',
+						path: `${rootDirectory}/scss/components/_{{dashCase name}}.scss`,
 						templateFile: 'generatorTemplates/component/Component.scss.hbs',
 					},
 					{
 						type: 'append',
-						path: 'src/scss/_components.scss',
+						path: `${rootDirectory}/scss/_components.scss`,
 						pattern: `/* PLOP_INJECT_IMPORT */`,
 						template: `@import 'components/{{dashCase name}}';`,
 					}
@@ -73,49 +106,38 @@ module.exports = (plop) => {
 
 	plop.setGenerator('page', {
 		description: 'Create a page',
-		prompts: [
-			{
-				type: 'input',
-				name: 'name',
-				message: 'What is your page name?',
-				validate: requireField('name'),
-			},
-			{
-				type: 'confirm',
-				name: 'cssModules',
-				message: 'Did you enable CSS modules?',
-			},
-		],
-		actions: function (data) {
+		prompts: [createQuestion('page')],
+		actions: function () {
 			let actionsList = [
 				{
 					type: 'add',
-					path: 'src/js/containers/pages/{{pascalCase name}}Page/{{pascalCase name}}Page.jsx',
+					path: `${rootDirectory}/ts/containers/pages/{{pascalCase name}}Page/{{pascalCase name}}Page.tsx`,
 					templateFile: 'generatorTemplates/page/Page.js.hbs',
+					data: { isCssModules },
 				},
 				{
 					type: 'add',
-					path: 'src/test/containers/pages/{{pascalCase name}}Page.test.js',
+					path: `${rootDirectory}/ts/containers/pages/{{pascalCase name}}Page/{{pascalCase name}}Page.test.tsx`,
 					templateFile: 'generatorTemplates/page/Page.test.js.hbs',
 				},
 			];
 
-			if (data.cssModules) {
+			if (isCssModules) {
 				actionsList.push({
 					type: 'add',
-					path: 'src/js/containers/pages/{{pascalCase name}}Page/{{pascalCase name}}Page.scss',
+					path: `${rootDirectory}/ts/containers/pages/{{pascalCase name}}Page/{{pascalCase name}}Page.scss`,
 					templateFile: 'generatorTemplates/component/Component.scss.hbs',
 				});
 			} else {
 				actionsList.push(
 					{
 						type: 'add',
-						path: 'src/scss/containers/pages/_{{dashCase name}}.scss',
+						path: `${rootDirectory}/scss/containers/pages/_{{dashCase name}}.scss`,
 						templateFile: 'generatorTemplates/component/Component.scss.hbs',
 					},
 					{
 						type: 'append',
-						path: 'src/scss/_containers.scss',
+						path: `${rootDirectory}/scss/_containers.scss`,
 						pattern: `/* PLOP_INJECT_IMPORT */`,
 						template: `@import 'containers/pages/{{dashCase name}}';`,
 					}
@@ -128,49 +150,38 @@ module.exports = (plop) => {
 
 	plop.setGenerator('container', {
 		description: 'Create a container',
-		prompts: [
-			{
-				type: 'input',
-				name: 'name',
-				message: 'What is your container name?',
-				validate: requireField('name'),
-			},
-			{
-				type: 'confirm',
-				name: 'cssModules',
-				message: 'Did you enable CSS modules?',
-			},
-		],
-		actions: function (data) {
+		prompts: [createQuestion('container')],
+		actions: function () {
 			let actionsList = [
 				{
 					type: 'add',
-					path: 'src/js/containers/{{pascalCase name}}/{{pascalCase name}}.jsx',
+					path: `${rootDirectory}/ts/containers/{{pascalCase name}}/{{pascalCase name}}.tsx`,
 					templateFile: 'generatorTemplates/component/Component.js.hbs',
+					data: { isCssModules },
 				},
 				{
 					type: 'add',
-					path: 'src/test/containers/{{pascalCase name}}.test.js',
-					templateFile: 'generatorTemplates/Container.test.js.hbs',
+					path: `${rootDirectory}/ts/containers/{{pascalCase name}}/{{pascalCase name}}.test.tsx`,
+					templateFile: 'generatorTemplates/component/Component.test.js.hbs',
 				},
 			];
 
-			if (data.cssModules) {
+			if (isCssModules) {
 				actionsList.push({
 					type: 'add',
-					path: 'src/js/containers/{{pascalCase name}}/{{pascalCase name}}.scss',
+					path: `${rootDirectory}/ts/containers/{{pascalCase name}}/{{pascalCase name}}.scss`,
 					templateFile: 'generatorTemplates/component/Component.scss.hbs',
 				});
 			} else {
 				actionsList.push(
 					{
 						type: 'add',
-						path: 'src/scss/containers/_{{dashCase name}}.scss',
+						path: `${rootDirectory}/scss/containers/_{{dashCase name}}.scss`,
 						templateFile: 'generatorTemplates/component/Component.scss.hbs',
 					},
 					{
 						type: 'append',
-						path: 'src/scss/_containers.scss',
+						path: `${rootDirectory}/scss/_containers.scss`,
 						pattern: `/* PLOP_INJECT_IMPORT */`,
 						template: `@import 'containers/{{dashCase name}}';`,
 					}
@@ -183,18 +194,11 @@ module.exports = (plop) => {
 
 	plop.setGenerator('hook', {
 		description: 'Create a custom react hook',
-		prompts: [
-			{
-				type: 'input',
-				name: 'name',
-				message: 'What is your hook name?',
-				validate: requireField('name'),
-			},
-		],
+		prompts: [createQuestion('hook')],
 		actions: [
 			{
 				type: 'add',
-				path: 'src/js/customHooks/{{camelCase name}}.js',
+				path: `${rootDirectory}/ts/customHooks/{{camelCase name}}.ts`,
 				templateFile: 'generatorTemplates/hook.js.hbs',
 			},
 		],
@@ -202,23 +206,16 @@ module.exports = (plop) => {
 
 	plop.setGenerator('service', {
 		description: 'Create a service',
-		prompts: [
-			{
-				type: 'input',
-				name: 'name',
-				message: 'What is your service name?',
-				validate: requireField('name'),
-			},
-		],
+		prompts: [createQuestion('service')],
 		actions: [
 			{
 				type: 'add',
-				path: 'src/js/services/{{pascalCase name}}Service.js',
+				path: `${rootDirectory}/ts/services/{{pascalCase name}}Service.ts`,
 				templateFile: 'generatorTemplates/service/Service.js.hbs',
 			},
 			{
 				type: 'add',
-				path: 'src/js/services/HttpService.js',
+				path: `${rootDirectory}/ts/services/HttpService.ts`,
 				templateFile: 'generatorTemplates/service/HttpService.js.hbs',
 				skipIfExists: true,
 			},
@@ -227,47 +224,95 @@ module.exports = (plop) => {
 
 	plop.setGenerator('reducer', {
 		description: 'Create a reducer',
-		prompts: [
-			{
-				type: 'input',
-				name: 'name',
-				message: 'What is your reducer name?',
-				validate: requireField('name'),
-			},
-		],
-		actions: [
-			{
-				type: 'add',
-				path: 'src/js/store/{{camelCase name}}/actions/{{pascalCase name}}Actions.js',
-				templateFile: 'generatorTemplates/reducer/Actions.js.hbs',
-			},
-			{
-				type: 'add',
-				path: 'src/js/store/{{camelCase name}}/reducers/{{pascalCase name}}Reducer.js',
-				templateFile: 'generatorTemplates/reducer/Reducer.js.hbs',
-			},
-			{
-				type: 'add',
-				path: 'src/js/store/{{camelCase name}}/selectors/{{pascalCase name}}Selectors.js',
-				templateFile: 'generatorTemplates/reducer/Selectors.js.hbs',
-			},
-			{
-				type: 'add',
-				path: 'src/js/store/{{camelCase name}}/{{pascalCase name}}ActionTypes.js',
-				templateFile: 'generatorTemplates/reducer/ActionTypes.js.hbs',
-			},
-			{
-				type: 'append',
-				path: 'src/js/store/rootReducer.js',
-				pattern: `/* PLOP_INJECT_IMPORT */`,
-				template: `import {{camelCase name}} from './{{camelCase name}}/reducers/{{pascalCase name}}Reducer';`,
-			},
-			{
-				type: 'append',
-				path: 'src/js/store/rootReducer.js',
-				pattern: `/* PLOP_INJECT_REDUCER_SLICE */`,
-				template: `{{camelCase name}},`,
-			},
-		],
+		prompts: createQuestion('reducer'),
+		actions: function (data) {
+			let actionsList = [
+				{
+					type: 'add',
+					path: `${rootDirectory}/ts/store/{{camelCase reducerEntity}}/actions/{{pascalCase name}}Actions.ts`,
+					templateFile: 'generatorTemplates/reducer/Actions.js.hbs',
+				},
+				{
+					type: 'add',
+					path: `${rootDirectory}/ts/store/{{camelCase reducerEntity}}/reducers/{{pascalCase name}}Reducer.ts`,
+					templateFile: 'generatorTemplates/reducer/Reducer.js.hbs',
+				},
+				{
+					type: 'add',
+					path: `${rootDirectory}/ts/store/{{camelCase reducerEntity}}/selectors/{{pascalCase name}}Selectors.ts`,
+					templateFile: 'generatorTemplates/reducer/Selectors.js.hbs',
+				},
+				{
+					type: 'append',
+					path: `${rootDirectory}/ts/store/rootReducer.ts`,
+					pattern: `/* PLOP_INJECT_IMPORT */`,
+					template: `import {{camelCase name}} from './{{camelCase reducerEntity}}/reducers/{{pascalCase name}}Reducer';`,
+				},
+				{
+					type: 'append',
+					path: `${rootDirectory}/ts/store/rootReducer.ts`,
+					pattern: `/* PLOP_INJECT_REDUCER_SLICE */`,
+					template: `{{camelCase name}},`,
+				},
+			];
+
+			//if store entity (directory) exists
+			if (isStoreEntityExist(data.reducerEntity)) {
+				actionsList.push(
+					{
+						type: 'append',
+						path: `${rootDirectory}/ts/store/{{camelCase reducerEntity}}/{{pascalCase reducerEntity}}ActionTypes.ts`,
+						pattern: `/* PLOP_INJECT_ACTION_TYPE */`,
+						template: `TEST_ACTION = '[{{pascalCase name}}] TEST_ACTION',`,
+					},
+					{
+						type: 'append',
+						path: `${rootDirectory}/ts/store/{{camelCase reducerEntity}}/{{pascalCase reducerEntity}}ActionsInterfaces.ts`,
+						pattern: `/* PLOP_INJECT_ACTION_INTERFACE */`,
+						template: `
+						interface TestAction {
+							type: {{pascalCase reducerEntity}}ActionTypes.TEST_ACTION;
+						}
+						`,
+					},
+					{
+						type: 'append',
+						path: `${rootDirectory}/ts/store/{{camelCase reducerEntity}}/{{pascalCase reducerEntity}}ActionsInterfaces.ts`,
+						pattern: `/* PLOP_INJECT_ACTION */`,
+						template: `TestAction |`,
+					},
+					{
+						type: 'append',
+						path: `${rootDirectory}/ts/store/{{camelCase reducerEntity}}/{{pascalCase reducerEntity}}ReducersInterfaces.ts`,
+						pattern: `/* PLOP_INJECT_REDUCER_INTERFACE */`,
+						template: `
+						export interface {{pascalCase name}}ReducerInitialState {
+							testString: string;
+						}
+						`,
+					}
+				);
+			} else {
+				actionsList.push(
+					{
+						type: 'add',
+						path: `${rootDirectory}/ts/store/{{camelCase reducerEntity}}/{{pascalCase reducerEntity}}ActionTypes.ts`,
+						templateFile: 'generatorTemplates/reducer/ActionTypes.js.hbs',
+					},
+					{
+						type: 'add',
+						path: `${rootDirectory}/ts/store/{{camelCase reducerEntity}}/{{pascalCase reducerEntity}}ActionsInterfaces.ts`,
+						templateFile: 'generatorTemplates/reducer/ActionsInterfaces.js.hbs',
+					},
+					{
+						type: 'add',
+						path: `${rootDirectory}/ts/store/{{camelCase reducerEntity}}/{{pascalCase reducerEntity}}ReducersInterfaces.ts`,
+						templateFile: 'generatorTemplates/reducer/ReducersInterfaces.js.hbs',
+					}
+				);
+			}
+
+			return actionsList;
+		},
 	});
 };

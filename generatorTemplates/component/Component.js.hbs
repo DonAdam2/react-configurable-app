@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-{{#if cssModules}}
+{{#if isCssModules}}
     //styles
-    import styles from './{{pascalCase name}}.scss';
+    import classes from './{{pascalCase name}}.scss';
 {{/if}}
 
-const {{pascalCase name}} = (props) => {
+const {{pascalCase name}} = () => {
     return (
-        {{#if cssModules}}
-            <div  className={styles.{{camelCase name}}Wrapper}>
+        {{#if isCssModules}}
+            <div  className={classes.{{camelCase name}}Wrapper}>
         {{else}}
             <div  className="{{camelCase name}}Wrapper">
         {{/if}}

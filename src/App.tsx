@@ -12,7 +12,7 @@ import { setEvents } from './ts/constants/EventDispatcher';
 //interfaces
 import { AppInterface } from './ts/interfaces/AppInterfaces';
 //components
-import LoadingIcon from './ts/components/shared/LoadingIcon';
+import LoadingIcon from './ts/components/shared/loadingIcon/LoadingIcon';
 const TestComponent = lazy(() => import('./ts/containers/TestComponent'));
 
 const App: FC<AppInterface> = ({ config }) => {

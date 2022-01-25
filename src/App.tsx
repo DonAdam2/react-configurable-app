@@ -25,14 +25,14 @@ const App: FC<AppInterface> = ({ config }) => {
 	}, [config.events, config.theme, config.views]);
 
 	return (
-		<>
+		<div className="container">
 			{/*<h1 style={{ textAlign: 'center' }}>Webpack react boilerplate</h1>*/}
 			<Routes>
 				{routesConfig.map((el) => (
 					<Route key={el.path} path={el.path} element={el.element} />
 				))}
 			</Routes>
-		</>
+		</div>
 	);
 };
 

@@ -10,6 +10,8 @@ import { setEvents } from './ts/constants/EventDispatcher';
 import { AppInterface } from './ts/interfaces/AppInterfaces';
 //routes
 import { routesConfig } from './ts/routing/routingConstants/routesConfig';
+//components
+import Header from './ts/components/header/Header';
 
 const App: FC<AppInterface> = ({ config }) => {
 	useEffect(() => {
@@ -27,10 +29,12 @@ const App: FC<AppInterface> = ({ config }) => {
 	return (
 		<div className="container">
 			{/*<h1 style={{ textAlign: 'center' }}>Webpack react boilerplate</h1>*/}
+			<Header />
 			<Routes>
 				{routesConfig.map((el) => (
 					<Route key={el.path} path={el.path} element={el.element} />
 				))}
+				<Route path="*" element={<p style={{ color: 'red' }}>Page not found</p>} />
 			</Routes>
 		</div>
 	);

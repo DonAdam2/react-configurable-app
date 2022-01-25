@@ -1,5 +1,6 @@
 import React, { FC, useEffect } from 'react';
 import { hot } from 'react-hot-loader/root';
+import { Route, Routes } from 'react-router-dom';
 //lodash
 import { merge } from 'lodash';
 //constants
@@ -8,7 +9,7 @@ import { setEvents } from './ts/constants/EventDispatcher';
 //interfaces
 import { AppInterface } from './ts/interfaces/AppInterfaces';
 //routes
-import { MainRoutes } from './ts/routing/routingConstants/MainRoutes';
+import { routesConfig } from './ts/routing/routingConstants/routesConfig';
 
 const App: FC<AppInterface> = ({ config }) => {
 	useEffect(() => {
@@ -25,8 +26,12 @@ const App: FC<AppInterface> = ({ config }) => {
 
 	return (
 		<>
-			<h1 style={{ textAlign: 'center' }}>Webpack react boilerplate</h1>
-			<MainRoutes />
+			{/*<h1 style={{ textAlign: 'center' }}>Webpack react boilerplate</h1>*/}
+			<Routes>
+				{routesConfig.map((el) => (
+					<Route key={el.path} path={el.path} element={el.element} />
+				))}
+			</Routes>
 		</>
 	);
 };

@@ -1,0 +1,14 @@
+.timeline-wrapper {
+  .timeline {
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    list-style: none;
+    padding: 0;
+
+    & * {
+      box-sizing: border-box;
+    }
+  }
+}

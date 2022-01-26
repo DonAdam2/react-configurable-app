@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react';
+import { toast } from 'react-toastify';
 //components
 import Stepper from '../../../components/shared/stepper/Stepper';
 //constants
@@ -41,11 +42,12 @@ const CheckoutPage: FC = (): JSX.Element => {
 		setIsSecondStepLoading(true);
 		await timeout(3000);
 		setIsSecondStepLoading(false);
-		console.log(
-			viewsController.checkoutPage?.stepper?.secondStepCall === 'getMovies'
-				? 'Made movies api call'
-				: 'Made actors api call'
-		);
+
+		if (viewsController.checkoutPage?.stepper?.secondStepCall === 'getMovies') {
+			toast.success('Made movies api call');
+		} else {
+			toast.success('Made actors api call');
+		}
 	};
 
 	const stepperContent = [
@@ -105,11 +107,11 @@ const CheckoutPage: FC = (): JSX.Element => {
 	];
 
 	const submitStepper = () => {
-		console.log(
-			viewsController.checkoutPage?.stepper?.paymentService === 'paypal'
-				? 'Payment done using paypal'
-				: 'payment done using stripe'
-		);
+		if (viewsController.checkoutPage?.stepper?.paymentService === 'paypal') {
+			toast.success('Payment done using paypal');
+		} else {
+			toast.success('Payment done using stripe');
+		}
 	};
 
 	return <Stepper stepperContent={stepperContent} submitStepper={submitStepper} />;

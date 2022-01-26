@@ -12,6 +12,7 @@ import configureStore from './ts/store/configureStore';
 import App from './App';
 //styles
 import './scss/global.scss';
+import 'react-toastify/dist/ReactToastify.css';
 
 const store = configureStore();
 

@@ -1,11 +1,13 @@
 import React from 'react';
 import { hot } from 'react-hot-loader/root';
 import { Route, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 //routes
 import { routesConfig } from './ts/routing/routingConstants/routesConfig';
+//constants
+import { themeOptions } from './ts/constants/Constants';
 //components
 import Header from './ts/components/header/Header';
-import { themeOptions } from './ts/constants/Constants';
 
 const App = () => {
 	/*useEffect(() => {
@@ -38,6 +40,7 @@ const App = () => {
 					/>
 				</Routes>
 			</main>
+			<ToastContainer />
 		</div>
 	);
 };

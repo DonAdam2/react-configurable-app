@@ -1,8 +1,10 @@
 import React, { FC } from 'react';
-//components
-import Accordion from '../accordion/Accordion';
 //interfaces
 import { TimelineEntryInterface } from '../../../interfaces/components/TimelineEntryInterface';
+//styles
+import classes from './TimelineEntry.scss';
+//components
+import Accordion from '../accordion/Accordion';
 
 const TimelineEntry: FC<TimelineEntryInterface> = ({
 	children,
@@ -17,19 +19,19 @@ const TimelineEntry: FC<TimelineEntryInterface> = ({
 
 		switch (status) {
 			case 'success':
-				name = 'green';
+				name = classes.timelineStepMarkerGreen;
 				break;
 			case 'danger':
-				name = 'red';
+				name = classes.timelineStepMarkerRed;
 				break;
 			case 'primary':
-				name = 'blue';
+				name = classes.timelineStepMarkerBlue;
 				break;
 			case 'warning':
-				name = 'yellow';
+				name = classes.timelineStepMarkerYellow;
 				break;
 			case 'default':
-				name = 'grey';
+				name = classes.timelineStepMarkerGrey;
 				break;
 			default:
 				name = '';
@@ -39,16 +41,16 @@ const TimelineEntry: FC<TimelineEntryInterface> = ({
 	};
 
 	const renderHeader = () => (
-		<div className="timeline-accordion-header">
+		<div className={classes.timelineAccordionHeader}>
 			<span>{label}</span>
-			<span className="timeline-date">{createdAt}</span>
+			<span className={classes.timelineDate}>{createdAt}</span>
 		</div>
 	);
 
 	return (
-		<li className="timeline-entry">
-			<div className="timeline-header">
-				<div className={`timeline-step-marker timeline-step-marker--${getActivityLogColor()}`} />
+		<li className={classes.timelineEntry}>
+			<div className={classes.timelineHeader}>
+				<div className={`${classes.timelineStepMarker} ${getActivityLogColor()}`} />
 				<Accordion
 					isAccordionOpen={isAccordionOpen}
 					accordionIcon={accordionIcon}

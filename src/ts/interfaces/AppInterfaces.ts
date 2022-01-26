@@ -1,14 +1,25 @@
-export interface EventDispatcherInterface {
-	trigger?: (eventName: string, payload: any) => void;
-}
-
-export interface EventsInterface {
-	[prop: string]: (payload: any) => void;
-}
-
 export interface ViewsInterface {
-	testComponent?: {
-		isPayment?: boolean;
+	homePage?: {
+		progressBar?: {
+			show?: boolean;
+			height?: number | string;
+		};
+		parallax?: {
+			show?: boolean;
+			imageUrl?: string;
+			speed?: number;
+		};
+	};
+	checkoutPage?: {
+		stepper?: {
+			secondStepCall?: 'getMovies' | 'getActors';
+			paymentService?: 'paypal' | 'stripe';
+		};
+	};
+	timelinePage?: {
+		timeLine?: {
+			show?: boolean;
+		};
 	};
 }
 
@@ -34,7 +45,6 @@ export interface ThemeInterface {
 
 export interface AppInterface {
 	config: {
-		events?: EventsInterface;
 		views?: ViewsInterface;
 		theme?: ThemeInterface;
 	};

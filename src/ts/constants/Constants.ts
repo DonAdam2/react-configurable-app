@@ -1,7 +1,5 @@
 import { ViewsInterface } from '../interfaces/AppInterfaces';
 
-export const EventDictionary = ['onPayment'];
-
 export const themeOptions = {
 	palette: {
 		background: {
@@ -23,7 +21,26 @@ export const themeOptions = {
 };
 
 export const viewsController: ViewsInterface = {
-	testComponent: {
-		isPayment: true,
+	homePage: {
+		progressBar: {
+			show: true,
+			height: '.5rem',
+		},
+		parallax: {
+			show: true,
+			imageUrl: 'https://picsum.photos/1280/500/?image=50',
+			speed: 3,
+		},
+	},
+	checkoutPage: {
+		stepper: {
+			secondStepCall: 'getMovies',
+			paymentService: 'paypal',
+		},
+	},
+	timelinePage: {
+		timeLine: {
+			show: true,
+		},
 	},
 };

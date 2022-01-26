@@ -6,30 +6,14 @@ import { getTestAction } from '../store/app/selectors/AppSelectors';
 import { setTestAction } from '../store/app/actions/AppActions';
 //state
 import { State } from '../store/rootReducer';
-//constants
-import { EventDispatcher, Events } from '../constants/EventDispatcher';
-import { themeOptions, viewsController } from '../constants/Constants';
 
 const TestComponent = () => {
 	const dispatch = useDispatch(),
 		testAction = useSelector((state: State) => getTestAction(state));
 
-	const payHandler = () => {
-		if (Events.onPayment) {
-			EventDispatcher.trigger && EventDispatcher.trigger('onPayment', {});
-		} else {
-			console.log('Default event handler');
-		}
-	};
-
 	return (
 		<div className="container">
-			<p
-				style={{
-					backgroundColor: themeOptions.palette.background.default,
-					color: themeOptions.palette.text.primary,
-				}}
-			>
+			<p>
 				Current environment API is <strong>{process.env.BASE_URL}</strong>
 			</p>
 			<p>
@@ -38,11 +22,6 @@ const TestComponent = () => {
 			<div>
 				<button onClick={() => dispatch(setTestAction())}>Change text</button>
 			</div>
-			{viewsController.testComponent && viewsController.testComponent.isPayment && (
-				<div>
-					<button onClick={payHandler}>Pay</button>
-				</div>
-			)}
 		</div>
 	);
 };

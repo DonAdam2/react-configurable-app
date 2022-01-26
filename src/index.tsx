@@ -15,33 +15,10 @@ import './scss/global.scss';
 
 const store = configureStore();
 
-const config = {
-	/*events: {
-		onPayment: (payload: any) => {
-			console.log('On payment Click Triggered and this is the payload: ', payload);
-		},
-	},*/
-	/*views: {
-		testComponent: {
-			isPayment: false,
-		},
-	},*/
-	/*theme: {
-		palette: {
-			background: {
-				default: 'red',
-			},
-			text: {
-				primary: '#fff',
-			},
-		},
-	},*/
-};
-
 ReactDOM.render(
 	<Provider store={store}>
 		<BrowserRouter>
-			<App config={config} />
+			<App />
 		</BrowserRouter>
 	</Provider>,
 	document.getElementById('root')

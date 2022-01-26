@@ -5,6 +5,7 @@ import { Route, Routes } from 'react-router-dom';
 import { routesConfig } from './ts/routing/routingConstants/routesConfig';
 //components
 import Header from './ts/components/header/Header';
+import { themeOptions } from './ts/constants/Constants';
 
 const App = () => {
 	/*useEffect(() => {
@@ -17,7 +18,13 @@ const App = () => {
 	}, [config.theme, config.views]);*/
 
 	return (
-		<div className="container">
+		<div
+			className="container"
+			style={{
+				fontSize: themeOptions.typography.htmlFontSize,
+				backgroundColor: themeOptions.palette.background.default,
+			}}
+		>
 			{/*<h1 style={{ textAlign: 'center' }}>Webpack react boilerplate</h1>*/}
 			<Header />
 			<main>
@@ -25,7 +32,10 @@ const App = () => {
 					{routesConfig.map((el) => (
 						<Route key={el.path} path={el.path} element={el.element} />
 					))}
-					<Route path="*" element={<p style={{ color: 'red' }}>Page not found</p>} />
+					<Route
+						path="*"
+						element={<p style={{ color: themeOptions.palette.danger.main }}>Page not found</p>}
+					/>
 				</Routes>
 			</main>
 		</div>

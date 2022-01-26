@@ -30,12 +30,14 @@ const App: FC<AppInterface> = ({ config }) => {
 		<div className="container">
 			{/*<h1 style={{ textAlign: 'center' }}>Webpack react boilerplate</h1>*/}
 			<Header />
-			<Routes>
-				{routesConfig.map((el) => (
-					<Route key={el.path} path={el.path} element={el.element} />
-				))}
-				<Route path="*" element={<p style={{ color: 'red' }}>Page not found</p>} />
-			</Routes>
+			<main>
+				<Routes>
+					{routesConfig.map((el) => (
+						<Route key={el.path} path={el.path} element={el.element} />
+					))}
+					<Route path="*" element={<p style={{ color: 'red' }}>Page not found</p>} />
+				</Routes>
+			</main>
 		</div>
 	);
 };

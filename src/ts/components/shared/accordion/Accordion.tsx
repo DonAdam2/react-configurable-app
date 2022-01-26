@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 // styles
 import classes from './Accordion.scss';
 //interfaces
@@ -9,11 +9,64 @@ const Accordion: FC<AccordionInterface> = ({ label, accordionIcon, isAccordionOp
 		duration = 200,
 		ref = useRef<HTMLDivElement>(null);
 
+	const expandAccordion = useCallback(() => {
+		const start = performance.now(),
+			element = ref.current;
+
+		requestAnimationFrame(function animate(time) {
+			const runtime = time - start,
+				relativeProgress = runtime / duration,
+				process = Math.min(relativeProgress, 1);
+
+			if (process < 1) {
+				incrementHeight(process);
+				requestAnimationFrame(animate);
+			}
+
+			if (process === 1 && element) {
+				element.style.height = 'auto';
+				element.style.overflow = 'initial';
+			}
+		});
+	}, []);
+
+	const collapseAccordion = useCallback(() => {
+		const start = performance.now(),
+			element = ref.current;
+
+		requestAnimationFrame(function animate(time) {
+			const runtime = time - start,
+				relativeProgress = runtime / duration,
+				process = Math.min(relativeProgress, 1);
+
+			if (process < 1) {
+				decrementHeight(process);
+				requestAnimationFrame(animate);
+			}
+			if (process === 1 && element) {
+				element.style.height = '';
+				element.style.overflow = '';
+			}
+		});
+	}, []);
+
+	const toggleAccordion = useCallback(() => {
+		const expanded = !isExpanded;
+
+		if (expanded) {
+			expandAccordion();
+		} else {
+			collapseAccordion();
+		}
+		setIsExpanded(expanded);
+	}, [expandAccordion, collapseAccordion, isExpanded]);
+
 	useEffect(() => {
 		if (isAccordionOpen) {
-			toggleAccordion();
+			expandAccordion();
+			setIsExpanded(true);
 		}
-	}, [isAccordionOpen]);
+	}, [isAccordionOpen, expandAccordion]);
 
 	const incrementHeight = (progress: number) => {
 		const element = ref.current;
@@ -35,58 +88,6 @@ const Accordion: FC<AccordionInterface> = ({ label, accordionIcon, isAccordionOp
 			}px`;
 			element.style.overflow = 'hidden';
 		}
-	};
-
-	const expandAccordion = () => {
-		const start = performance.now(),
-			element = ref.current;
-
-		requestAnimationFrame(function animate(time) {
-			const runtime = time - start,
-				relativeProgress = runtime / duration,
-				process = Math.min(relativeProgress, 1);
-
-			if (process < 1) {
-				incrementHeight(process);
-				requestAnimationFrame(animate);
-			}
-
-			if (process === 1 && element) {
-				element.style.height = 'auto';
-				element.style.overflow = 'initial';
-			}
-		});
-	};
-
-	const collapseAccordion = () => {
-		const start = performance.now(),
-			element = ref.current;
-
-		requestAnimationFrame(function animate(time) {
-			const runtime = time - start,
-				relativeProgress = runtime / duration,
-				process = Math.min(relativeProgress, 1);
-
-			if (process < 1) {
-				decrementHeight(process);
-				requestAnimationFrame(animate);
-			}
-			if (process === 1 && element) {
-				element.style.height = '';
-				element.style.overflow = '';
-			}
-		});
-	};
-
-	const toggleAccordion = () => {
-		const expanded = !isExpanded;
-
-		if (expanded) {
-			expandAccordion();
-		} else {
-			collapseAccordion();
-		}
-		setIsExpanded(expanded);
 	};
 
 	return (

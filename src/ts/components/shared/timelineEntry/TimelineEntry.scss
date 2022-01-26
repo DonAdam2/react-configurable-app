@@ -1,0 +1,76 @@
+@import "../../../../scss/generic/variables";
+
+.timeline-entry {
+  display: flex;
+  align-items: stretch;
+  position: relative;
+
+  &:not(:last-child) {
+    &::before {
+      position: absolute;
+      top: $timeline-margin-top;
+      height: 100%;
+      padding-right: 11px;
+      border-right: 2px solid $grey;
+      content: "";
+    }
+  }
+
+  .timeline-header {
+    display: flex;
+    width: 100%;
+
+    .timeline-accordion-header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+
+      .timeline-date {
+        font-size: 13px;
+      }
+    }
+  }
+
+  .timeline-step-marker {
+    position: relative;
+    display: table-cell;
+    height: 24px;
+    min-height: 24px;
+    width: 24px;
+    min-width: 24px;
+    border: 4px solid #F2F2F2;
+    border-radius: 50%;
+    background-color: $white;
+    z-index: 0;
+    margin-right: 10px;
+    margin-top: $timeline-margin-top;
+
+    &--blue {
+      border-color: $blue;
+    }
+    &--green {
+      border-color: $green;
+    }
+    &--yellow {
+      border-color: $yellow;
+    }
+    &--grey {
+      border-color: $grey;
+    }
+    &--red {
+      border-color: $red;
+    }
+  }
+
+  .timeline-title {
+    font-size: 15px;
+
+    @media (min-width: 1281px) {
+      font-size: 17px;
+    }
+  }
+
+  .timeline-time {
+    text-align: right;
+  }
+}

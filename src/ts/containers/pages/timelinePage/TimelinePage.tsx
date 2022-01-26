@@ -1,11 +1,16 @@
 import React, { FC } from 'react';
+import { useSelector } from 'react-redux';
 import { format, addDays } from 'date-fns';
+//interfaces
+import { State } from '../../../store/rootReducer';
+//selectors
+import { getAppConfig } from '../../../store/app/selectors/AppSelectors';
 //component
 import Timeline from '../../../components/shared/timeline/Timeline';
-import { viewsController } from '../../../constants/Constants';
 
 const TimelinePage: FC = (): JSX.Element => {
-	const addOneDayToDate = (num: number) => format(addDays(new Date(), num), 'd MMMM yyy'),
+	const { views } = useSelector((state: State) => getAppConfig(state)),
+		addOneDayToDate = (num: number) => format(addDays(new Date(), num), 'd MMMM yyy'),
 		list = [
 			{
 				label: 'Success',
@@ -58,7 +63,7 @@ const TimelinePage: FC = (): JSX.Element => {
 				volutpat pretium libero. Suspendisse enim turpis, dictum sed, iaculis a, condimentum nec,
 				nisi.
 			</p>
-			{viewsController.timelinePage?.timeLine?.show && <Timeline list={list} />}
+			{views?.timelinePage?.timeLine?.show && <Timeline list={list} />}
 		</>
 	);
 };

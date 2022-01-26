@@ -43,9 +43,7 @@ export interface ThemeInterface {
 	};
 }
 
-export interface AppInterface {
-	config: {
-		views?: ViewsInterface;
-		theme?: ThemeInterface;
-	};
+export interface ConfigInterface {
+	views?: ViewsInterface;
+	theme?: ThemeInterface;
 }

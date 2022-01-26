@@ -1,12 +1,16 @@
 import React, { FC, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+//interfaces
+import { State } from '../../../store/rootReducer';
+//selectors
+import { getAppConfig } from '../../../store/app/selectors/AppSelectors';
 //components
 import Stepper from '../../../components/shared/stepper/Stepper';
-//constants
-import { viewsController } from '../../../constants/Constants';
 
 const CheckoutPage: FC = (): JSX.Element => {
-	const [acceptFirstTerms, setAcceptFirstTerms] = useState({
+	const { views } = useSelector((state: State) => getAppConfig(state)),
+		[acceptFirstTerms, setAcceptFirstTerms] = useState({
 			checked: false,
 			touched: false,
 		}),
@@ -43,7 +47,7 @@ const CheckoutPage: FC = (): JSX.Element => {
 		await timeout(3000);
 		setIsSecondStepLoading(false);
 
-		if (viewsController.checkoutPage?.stepper?.secondStepCall === 'getMovies') {
+		if (views?.checkoutPage?.stepper?.secondStepCall === 'getMovies') {
 			toast.success('Made movies api call');
 		} else {
 			toast.success('Made actors api call');
@@ -107,7 +111,7 @@ const CheckoutPage: FC = (): JSX.Element => {
 	];
 
 	const submitStepper = () => {
-		if (viewsController.checkoutPage?.stepper?.paymentService === 'paypal') {
+		if (views?.checkoutPage?.stepper?.paymentService === 'paypal') {
 			toast.success('Payment done using paypal');
 		} else {
 			toast.success('Payment done using stripe');

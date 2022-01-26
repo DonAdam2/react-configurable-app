@@ -1,32 +1,33 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 // styles
 import classes from './HomePage.scss';
+//interfaces
+import { State } from '../../../store/rootReducer';
+//selectors
+import { getAppConfig } from '../../../store/app/selectors/AppSelectors';
 //components
 import Parallax from '../../../components/shared/parallax/Parallax';
 import PageProgressBar from '../../../components/shared/pageProgressBar/PageProgressBar';
-import { themeOptions, viewsController } from '../../../constants/Constants';
 
 const HomePage = () => {
-	const { homePage } = viewsController;
+	const { theme, views } = useSelector((state: State) => getAppConfig(state));
+
 	return (
 		<div className={classes.homeWrapper}>
-			{homePage?.progressBar?.show && (
+			{views?.homePage?.progressBar?.show && (
 				<PageProgressBar
-					backgroundColor={themeOptions.palette.success.main}
-					height={homePage.progressBar.height}
+					backgroundColor={theme?.palette?.success?.main}
+					height={views?.homePage.progressBar.height}
 				/>
 			)}
-			{homePage?.parallax?.show && (
+			{views?.homePage?.parallax?.show && (
 				<Parallax
-					imageUrl={
-						homePage.parallax.imageUrl
-							? homePage.parallax.imageUrl
-							: 'https://picsum.photos/1280/500/?image=50'
-					}
-					parallaxSpeed={homePage.parallax.speed ? homePage.parallax.speed : 3}
+					imageUrl={views?.homePage?.parallax?.imageUrl}
+					parallaxSpeed={views?.homePage?.parallax?.speed}
 				>
 					<div className={classes.content}>
-						<h1>Speed ({homePage.parallax.speed})</h1>
+						<h1>Speed ({views?.homePage?.parallax?.speed})</h1>
 					</div>
 				</Parallax>
 			)}

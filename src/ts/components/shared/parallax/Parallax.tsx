@@ -34,11 +34,14 @@ const Parallax: FC<ParallaxInterface> = ({ parallaxSpeed, children, imageUrl }) 
 		};
 	}, [onParallax]);
 
-	const styles = {
-		backgroundImage: `url(${imageUrl})`,
-	};
 	return (
-		<div className={classes.parallax} style={styles} ref={parallaxDiv}>
+		<div
+			className={classes.parallax}
+			style={{
+				backgroundImage: `url(${imageUrl ? imageUrl : 'https://picsum.photos/1280/500/?image=50'})`,
+			}}
+			ref={parallaxDiv}
+		>
 			{children}
 		</div>
 	);

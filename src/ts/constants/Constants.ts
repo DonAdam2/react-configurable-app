@@ -1,6 +1,6 @@
-import { ViewsInterface } from '../interfaces/AppInterfaces';
+import { ConfigInterface, ThemeInterface, ViewsInterface } from '../interfaces/AppInterfaces';
 
-export const themeOptions = {
+export const themeOptions: ThemeInterface = {
 	palette: {
 		background: {
 			default: '#ffffff',
@@ -43,4 +43,9 @@ export const viewsController: ViewsInterface = {
 			show: true,
 		},
 	},
+};
+
+export const defaultConfiguration: ConfigInterface = {
+	theme: themeOptions,
+	views: viewsController,
 };

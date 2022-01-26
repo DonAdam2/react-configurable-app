@@ -1,6 +1,8 @@
 import React, { FC, useState } from 'react';
 //components
 import Stepper from '../../../components/shared/stepper/Stepper';
+//constants
+import { viewsController } from '../../../constants/Constants';
 
 const CheckoutPage: FC = (): JSX.Element => {
 	const [acceptFirstTerms, setAcceptFirstTerms] = useState({
@@ -39,7 +41,11 @@ const CheckoutPage: FC = (): JSX.Element => {
 		setIsSecondStepLoading(true);
 		await timeout(3000);
 		setIsSecondStepLoading(false);
-		console.log('second step clicked');
+		console.log(
+			viewsController.checkoutPage?.stepper?.secondStepCall === 'getMovies'
+				? 'Made movies api call'
+				: 'Made actors api call'
+		);
 	};
 
 	const stepperContent = [
@@ -99,7 +105,11 @@ const CheckoutPage: FC = (): JSX.Element => {
 	];
 
 	const submitStepper = () => {
-		console.log('submitted');
+		console.log(
+			viewsController.checkoutPage?.stepper?.paymentService === 'paypal'
+				? 'Payment done using paypal'
+				: 'payment done using stripe'
+		);
 	};
 
 	return <Stepper stepperContent={stepperContent} submitStepper={submitStepper} />;

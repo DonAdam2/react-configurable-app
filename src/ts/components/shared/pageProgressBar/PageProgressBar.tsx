@@ -16,7 +16,9 @@ const PageProgressBar: FC<PageProgressBarInterface> = ({ backgroundColor, height
 				(scrollContainer().scrollHeight - scrollContainer().clientHeight)) *
 			100;
 
-		setWidth(scrolledPercentage);
+		if (!isNaN(scrolledPercentage)) {
+			setWidth(scrolledPercentage);
+		}
 	}, []);
 
 	useEffect(() => {

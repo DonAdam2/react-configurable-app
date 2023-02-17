@@ -1,11 +1,11 @@
-import { State } from '../../rootReducer';
+import { RootState } from '@/ts/store/store';
 
-export const getTestAction = (state: State) => state.app.testString;
+export const getTestAction = (state: RootState) => state.app.testString;
 
-export const getAppConfig = (state: State) => state.app.config;
+export const getAppConfig = (state: RootState) => state.app.config;
 
 //replace the following with your own selector
-export const getAppUserPermissionsList = (state: State) => {
-	console.log(state);
-	return ['search'];
+export const getAppUserPermissionsList = (state: RootState) => {
+  console.log(state);
+  return ['search'];
 };

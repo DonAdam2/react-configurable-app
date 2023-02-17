@@ -4,9 +4,9 @@ import { render, screen } from '@testing-library/react';
 import HomePage from './HomePage';
 
 describe('<HomePage />', () => {
-	test('renders webpack react boilerplate', () => {
-		render(<HomePage />);
-		const title = screen.getByText(/homePage/i);
-		expect(title).toBeInTheDocument();
-	});
+  test('renders webpack react boilerplate', () => {
+    render(<HomePage />);
+    const title = screen.getByText(/homePage/i);
+    expect(title).toBeInTheDocument();
+  });
 });

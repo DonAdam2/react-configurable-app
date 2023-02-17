@@ -1,71 +1,69 @@
 import React, { FC } from 'react';
 import { useSelector } from 'react-redux';
 import { format, addDays } from 'date-fns';
-//interfaces
-import { State } from '../../../store/rootReducer';
 //selectors
-import { getAppConfig } from '../../../store/app/selectors/AppSelectors';
+import { getAppConfig } from '@/ts/store/app/selectors/AppSelectors';
 //component
 import Timeline from '../../../components/shared/timeline/Timeline';
 
 const TimelinePage: FC = (): JSX.Element => {
-	const { views } = useSelector((state: State) => getAppConfig(state)),
-		addOneDayToDate = (num: number) => format(addDays(new Date(), num), 'd MMMM yyy'),
-		list = [
-			{
-				label: 'Success',
-				createdAt: format(new Date(), 'd MMMM yyy'),
-				status: 'success',
-				content: <p>content of the current timeline entry</p>,
-			},
-			{
-				label: 'Primary',
-				createdAt: addOneDayToDate(1),
-				status: 'primary',
-				content: <p>content of the current timeline entry</p>,
-			},
-			{
-				label: 'Warning',
-				createdAt: addOneDayToDate(2),
-				status: 'warning',
-				content: <p>content of the current timeline entry</p>,
-			},
-			{
-				label: 'Default',
-				createdAt: addOneDayToDate(3),
-				status: 'default',
-				content: <p>content of the current timeline entry</p>,
-			},
-			{
-				label: 'Danger',
-				createdAt: addOneDayToDate(4),
-				status: 'danger',
-				content: <p>content of the current timeline entry</p>,
-			},
-		];
-	return (
-		<>
-			<p>
-				Suspendisse pulvinar, augue ac venenatis condimentum, sem libero volutpat nibh, nec
-				pellentesque velit pede quis nunc. Etiam vitae tortor. Etiam ultricies nisi vel augue. Sed
-				mollis, eros et ultrices tempus, mauris ipsum aliquam libero, non adipiscing dolor urna a
-				orci. Sed in libero ut nibh placerat accumsan.
-			</p>
+  const { views } = useSelector(getAppConfig),
+    addOneDayToDate = (num: number) => format(addDays(new Date(), num), 'd MMMM yyy'),
+    list = [
+      {
+        label: 'Success',
+        createdAt: format(new Date(), 'd MMMM yyy'),
+        status: 'success',
+        content: <p>content of the current timeline entry</p>,
+      },
+      {
+        label: 'Primary',
+        createdAt: addOneDayToDate(1),
+        status: 'primary',
+        content: <p>content of the current timeline entry</p>,
+      },
+      {
+        label: 'Warning',
+        createdAt: addOneDayToDate(2),
+        status: 'warning',
+        content: <p>content of the current timeline entry</p>,
+      },
+      {
+        label: 'Default',
+        createdAt: addOneDayToDate(3),
+        status: 'default',
+        content: <p>content of the current timeline entry</p>,
+      },
+      {
+        label: 'Danger',
+        createdAt: addOneDayToDate(4),
+        status: 'danger',
+        content: <p>content of the current timeline entry</p>,
+      },
+    ];
+  return (
+    <>
+      <p>
+        Suspendisse pulvinar, augue ac venenatis condimentum, sem libero volutpat nibh, nec
+        pellentesque velit pede quis nunc. Etiam vitae tortor. Etiam ultricies nisi vel augue. Sed
+        mollis, eros et ultrices tempus, mauris ipsum aliquam libero, non adipiscing dolor urna a
+        orci. Sed in libero ut nibh placerat accumsan.
+      </p>
 
-			<p>
-				Phasellus tempus. Donec sodales sagittis magna. Phasellus dolor. Aenean ut eros et nisl
-				sagittis vestibulum. Aenean posuere, tortor sed cursus feugiat, nunc augue blandit nunc, eu
-				sollicitudin urna dolor sagittis lacus.
-			</p>
+      <p>
+        Phasellus tempus. Donec sodales sagittis magna. Phasellus dolor. Aenean ut eros et nisl
+        sagittis vestibulum. Aenean posuere, tortor sed cursus feugiat, nunc augue blandit nunc, eu
+        sollicitudin urna dolor sagittis lacus.
+      </p>
 
-			<p>
-				Vestibulum eu odio. Fusce fermentum. Praesent ut ligula non mi varius sagittis. Vestibulum
-				volutpat pretium libero. Suspendisse enim turpis, dictum sed, iaculis a, condimentum nec,
-				nisi.
-			</p>
-			{views?.timelinePage?.timeLine?.show && <Timeline list={list} />}
-		</>
-	);
+      <p>
+        Vestibulum eu odio. Fusce fermentum. Praesent ut ligula non mi varius sagittis. Vestibulum
+        volutpat pretium libero. Suspendisse enim turpis, dictum sed, iaculis a, condimentum nec,
+        nisi.
+      </p>
+      {views?.timelinePage?.timeLine?.show && <Timeline list={list} />}
+    </>
+  );
 };
 
 export default TimelinePage;

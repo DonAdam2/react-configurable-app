@@ -1,26 +1,31 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 //import meta image
-import './assets/images/metaImage.jpg';
+import '@/public/assets/images/metaImage.jpg';
 // required for babel polyfills
 import 'regenerator-runtime/runtime';
 //store configuration
-import configureStore from './ts/store/configureStore';
+import store from '@/ts/store/store';
 //root component
 import App from './App';
 //styles
-import './scss/global.scss';
 import 'react-toastify/dist/ReactToastify.css';
+import './scss/global.scss';
+/* PLOP_INJECT_PWA_IMPORTS */
 
-const store = configureStore();
+const container = document.getElementById('root'),
+  root = createRoot(container as Element);
 
-ReactDOM.render(
-	<Provider store={store}>
-		<BrowserRouter>
-			<App />
-		</BrowserRouter>
-	</Provider>,
-	document.getElementById('root')
+root.render(
+  <StrictMode>
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
+  </StrictMode>
 );
+
+/* PLOP_INJECT_PWA_REGISTERER */

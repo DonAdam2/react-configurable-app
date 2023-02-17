@@ -3,11 +3,11 @@ import { ReactNode } from 'react';
 import { AccordionInterface } from './AccordionInterface';
 
 export interface TimelineEntryInterface extends AccordionInterface {
-	createdAt: string;
-	status: string;
-	content?: ReactNode;
+  createdAt: string;
+  status: string;
+  content?: ReactNode;
 }
 
 export interface TimelineInterface {
-	list: TimelineEntryInterface[];
+  list: TimelineEntryInterface[];
 }

@@ -1,66 +1,64 @@
-@import "../../../../scss/generic/variables";
+@import '../../../../scss/generic/variables';
 
 .accordion-wrapper {
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 1px 4px 0 rgba($black, 0.2), 0 2px 8px 0 rgba($black, 0.19);
-    margin-bottom: 10px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px 0 rgba($black, 0.2), 0 2px 8px 0 rgba($black, 0.19);
+  margin-bottom: 10px;
+  width: 100%;
+
+  & * {
+    box-sizing: border-box;
+  }
+
+  // collapsed accordion styles
+  &.accordion-collapsed {
+    .accordion-header {
+      .accordion-header-icon {
+        transform: rotate(0deg);
+      }
+    }
+  }
+
+  // expanded accordion styles
+  &.accordion-expanded {
+    .accordion-header {
+      .accordion-header-icon {
+        transform: rotate(90deg);
+      }
+    }
+  }
+
+  .accordion {
     width: 100%;
+    overflow: hidden;
 
-    & * {
-        box-sizing: border-box;
+    &-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      cursor: pointer;
+      user-select: none;
+
+      .accordion-header-title {
+        display: flex;
+        width: 96%;
+      }
+
+      .accordion-header-icon {
+        transition: transform $duration ease-in-out;
+        fill: $black;
+      }
     }
 
-    // collapsed accordion styles
-    &.accordion-collapsed {
-        .accordion-header {
+    &-content {
+      overflow: hidden;
+      height: 0;
 
-            .accordion-header-icon {
-                transform: rotate(0deg);
-            }
-        }
+      .accordion-inner-content {
+        padding: 10px 15px;
+      }
     }
-
-    // expanded accordion styles
-    &.accordion-expanded {
-        .accordion-header {
-
-            .accordion-header-icon {
-                transform: rotate(90deg);
-            }
-        }
-    }
-
-    .accordion {
-        width: 100%;
-        overflow: hidden;
-
-        &-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            cursor: pointer;
-            user-select: none;
-
-            .accordion-header-title {
-                display: flex;
-                width: 96%;
-            }
-
-            .accordion-header-icon {
-                transition: transform $duration ease-in-out;
-                fill: $black;
-            }
-        }
-
-        &-content {
-            overflow: hidden;
-            height: 0;
-
-            .accordion-inner-content {
-                padding: 10px 15px;
-            }
-        }
-    }
+  }
 }

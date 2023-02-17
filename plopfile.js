@@ -1,4 +1,9 @@
-const { isCssModules, rootDirectory } = require('./buildTools/constants'),
+const {
+		isCssModules,
+		rootDirectory,
+		publicDirectory,
+		buildToolsDirectory,
+	} = require('./buildTools/constants'),
 	fs = require('fs');
 
 const requireField = (fieldName) => {
@@ -55,6 +60,58 @@ const createQuestion = (type) => {
 	}
 };
 
+const generateContainerOrPage = (isPage = false) => {
+	let actionsList = [
+		{
+			type: 'add',
+			path: `${rootDirectory}/ts/containers${isPage ? '/pages' : ''}/{{camelCase name}}${
+				isPage ? 'Page' : ''
+			}/{{pascalCase name}}${isPage ? 'Page' : ''}.tsx`,
+			templateFile: `generatorTemplates${isPage ? '/page/Page' : '/component/Component'}.js.hbs`,
+			data: { isCssModules },
+		},
+		{
+			type: 'add',
+			path: `${rootDirectory}/ts/containers${isPage ? '/pages' : ''}/{{camelCase name}}${
+				isPage ? 'Page' : ''
+			}/{{pascalCase name}}${isPage ? 'Page' : ''}.test.tsx`,
+			templateFile: `generatorTemplates${
+				isPage ? '/page/Page' : '/component/Component'
+			}.test.js.hbs`,
+		},
+	];
+
+	if (isCssModules) {
+		actionsList.push({
+			type: 'add',
+			path: `${rootDirectory}/ts/containers${isPage ? '/pages' : ''}/{{camelCase name}}${
+				isPage ? 'Page' : ''
+			}/{{pascalCase name}}${isPage ? 'Page' : ''}.scss`,
+			templateFile: 'generatorTemplates/component/Component.scss.hbs',
+		});
+	} else {
+		actionsList.push(
+			{
+				type: 'add',
+				path: `${rootDirectory}/scss/containers${isPage ? '/pages' : ''}/_{{dashCase name}}${
+					isPage ? '-page' : ''
+				}.scss`,
+				templateFile: 'generatorTemplates/component/Component.scss.hbs',
+			},
+			{
+				type: 'append',
+				path: `${rootDirectory}/scss/_containers.scss`,
+				pattern: `/* PLOP_INJECT_IMPORT */`,
+				template: `@import './containers${isPage ? '/pages' : ''}/{{dashCase name}}${
+					isPage ? '-page' : ''
+				}';`,
+			}
+		);
+	}
+
+	return actionsList;
+};
+
 module.exports = (plop) => {
 	plop.setGenerator('component', {
 		description: 'Create a component',
@@ -95,7 +152,7 @@ module.exports = (plop) => {
 						type: 'append',
 						path: `${rootDirectory}/scss/_components.scss`,
 						pattern: `/* PLOP_INJECT_IMPORT */`,
-						template: `@import 'components/{{dashCase name}}';`,
+						template: `@import './components/{{dashCase name}}';`,
 					}
 				);
 			}
@@ -107,89 +164,13 @@ module.exports = (plop) => {
 	plop.setGenerator('page', {
 		description: 'Create a page',
 		prompts: [createQuestion('page')],
-		actions: function () {
-			let actionsList = [
-				{
-					type: 'add',
-					path: `${rootDirectory}/ts/containers/pages/{{camelCase name}}Page/{{pascalCase name}}Page.tsx`,
-					templateFile: 'generatorTemplates/page/Page.js.hbs',
-					data: { isCssModules },
-				},
-				{
-					type: 'add',
-					path: `${rootDirectory}/ts/containers/pages/{{camelCase name}}Page/{{pascalCase name}}Page.test.tsx`,
-					templateFile: 'generatorTemplates/page/Page.test.js.hbs',
-				},
-			];
-
-			if (isCssModules) {
-				actionsList.push({
-					type: 'add',
-					path: `${rootDirectory}/ts/containers/pages/{{camelCase name}}Page/{{pascalCase name}}Page.scss`,
-					templateFile: 'generatorTemplates/component/Component.scss.hbs',
-				});
-			} else {
-				actionsList.push(
-					{
-						type: 'add',
-						path: `${rootDirectory}/scss/containers/pages/_{{dashCase name}}.scss`,
-						templateFile: 'generatorTemplates/component/Component.scss.hbs',
-					},
-					{
-						type: 'append',
-						path: `${rootDirectory}/scss/_containers.scss`,
-						pattern: `/* PLOP_INJECT_IMPORT */`,
-						template: `@import 'containers/pages/{{dashCase name}}';`,
-					}
-				);
-			}
-
-			return actionsList;
-		},
+		actions: generateContainerOrPage(true),
 	});
 
 	plop.setGenerator('container', {
 		description: 'Create a container',
 		prompts: [createQuestion('container')],
-		actions: function () {
-			let actionsList = [
-				{
-					type: 'add',
-					path: `${rootDirectory}/ts/containers/{{camelCase name}}/{{pascalCase name}}.tsx`,
-					templateFile: 'generatorTemplates/component/Component.js.hbs',
-					data: { isCssModules },
-				},
-				{
-					type: 'add',
-					path: `${rootDirectory}/ts/containers/{{camelCase name}}/{{pascalCase name}}.test.tsx`,
-					templateFile: 'generatorTemplates/component/Component.test.js.hbs',
-				},
-			];
-
-			if (isCssModules) {
-				actionsList.push({
-					type: 'add',
-					path: `${rootDirectory}/ts/containers/{{camelCase name}}/{{pascalCase name}}.scss`,
-					templateFile: 'generatorTemplates/component/Component.scss.hbs',
-				});
-			} else {
-				actionsList.push(
-					{
-						type: 'add',
-						path: `${rootDirectory}/scss/containers/_{{dashCase name}}.scss`,
-						templateFile: 'generatorTemplates/component/Component.scss.hbs',
-					},
-					{
-						type: 'append',
-						path: `${rootDirectory}/scss/_containers.scss`,
-						pattern: `/* PLOP_INJECT_IMPORT */`,
-						template: `@import 'containers/{{dashCase name}}';`,
-					}
-				);
-			}
-
-			return actionsList;
-		},
+		actions: generateContainerOrPage(),
 	});
 
 	plop.setGenerator('hook', {
@@ -229,13 +210,8 @@ module.exports = (plop) => {
 			let actionsList = [
 				{
 					type: 'add',
-					path: `${rootDirectory}/ts/store/{{camelCase reducerEntity}}/actions/{{pascalCase name}}Actions.ts`,
-					templateFile: 'generatorTemplates/reducer/Actions.js.hbs',
-				},
-				{
-					type: 'add',
-					path: `${rootDirectory}/ts/store/{{camelCase reducerEntity}}/reducers/{{pascalCase name}}Reducer.ts`,
-					templateFile: 'generatorTemplates/reducer/Reducer.js.hbs',
+					path: `${rootDirectory}/ts/store/{{camelCase reducerEntity}}/slices/{{pascalCase name}}Slice.ts`,
+					templateFile: 'generatorTemplates/reducer/Slice.js.hbs',
 				},
 				{
 					type: 'add',
@@ -244,13 +220,13 @@ module.exports = (plop) => {
 				},
 				{
 					type: 'append',
-					path: `${rootDirectory}/ts/store/rootReducer.ts`,
+					path: `${rootDirectory}/ts/store/reduxSlices.ts`,
 					pattern: `/* PLOP_INJECT_IMPORT */`,
-					template: `import {{camelCase name}} from './{{camelCase reducerEntity}}/reducers/{{pascalCase name}}Reducer';`,
+					template: `import {{camelCase name}} from './{{camelCase reducerEntity}}/slices/{{pascalCase name}}Slice';`,
 				},
 				{
 					type: 'append',
-					path: `${rootDirectory}/ts/store/rootReducer.ts`,
+					path: `${rootDirectory}/ts/store/reduxSlices.ts`,
 					pattern: `/* PLOP_INJECT_REDUCER_SLICE */`,
 					template: `{{camelCase name}},`,
 				},
@@ -258,61 +234,101 @@ module.exports = (plop) => {
 
 			//if store entity (directory) exists
 			if (isStoreEntityExist(data.reducerEntity)) {
-				actionsList.push(
-					{
-						type: 'append',
-						path: `${rootDirectory}/ts/store/{{camelCase reducerEntity}}/{{pascalCase reducerEntity}}ActionTypes.ts`,
-						pattern: `/* PLOP_INJECT_ACTION_TYPE */`,
-						template: `TEST_ACTION = '[{{pascalCase name}}] TEST_ACTION',`,
-					},
-					{
-						type: 'append',
-						path: `${rootDirectory}/ts/store/{{camelCase reducerEntity}}/{{pascalCase reducerEntity}}ActionsInterfaces.ts`,
-						pattern: `/* PLOP_INJECT_ACTION_INTERFACE */`,
-						template: `
-						interface TestAction {
-							type: {{pascalCase reducerEntity}}ActionTypes.TEST_ACTION;
-						}
-						`,
-					},
-					{
-						type: 'append',
-						path: `${rootDirectory}/ts/store/{{camelCase reducerEntity}}/{{pascalCase reducerEntity}}ActionsInterfaces.ts`,
-						pattern: `/* PLOP_INJECT_ACTION */`,
-						template: `TestAction |`,
-					},
-					{
-						type: 'append',
-						path: `${rootDirectory}/ts/store/{{camelCase reducerEntity}}/{{pascalCase reducerEntity}}ReducersInterfaces.ts`,
-						pattern: `/* PLOP_INJECT_REDUCER_INTERFACE */`,
-						template: `
-						export interface {{pascalCase name}}ReducerInitialState {
+				actionsList.push({
+					type: 'append',
+					path: `${rootDirectory}/ts/store/{{camelCase reducerEntity}}/{{pascalCase reducerEntity}}EntityInterfaces.ts`,
+					pattern: `/* PLOP_INJECT_REDUCER_INTERFACE */`,
+					template: `
+						export interface {{pascalCase name}}SliceInitialState {
 							testString: string;
 						}
 						`,
-					}
-				);
+				});
 			} else {
-				actionsList.push(
-					{
-						type: 'add',
-						path: `${rootDirectory}/ts/store/{{camelCase reducerEntity}}/{{pascalCase reducerEntity}}ActionTypes.ts`,
-						templateFile: 'generatorTemplates/reducer/ActionTypes.js.hbs',
-					},
-					{
-						type: 'add',
-						path: `${rootDirectory}/ts/store/{{camelCase reducerEntity}}/{{pascalCase reducerEntity}}ActionsInterfaces.ts`,
-						templateFile: 'generatorTemplates/reducer/ActionsInterfaces.js.hbs',
-					},
-					{
-						type: 'add',
-						path: `${rootDirectory}/ts/store/{{camelCase reducerEntity}}/{{pascalCase reducerEntity}}ReducersInterfaces.ts`,
-						templateFile: 'generatorTemplates/reducer/ReducersInterfaces.js.hbs',
-					}
-				);
+				actionsList.push({
+					type: 'add',
+					path: `${rootDirectory}/ts/store/{{camelCase reducerEntity}}/{{pascalCase reducerEntity}}EntityInterfaces.ts`,
+					templateFile: 'generatorTemplates/reducer/EntityInterfaces.js.hbs',
+				});
 			}
 
 			return actionsList;
 		},
+	});
+
+	const dontCacheBustURLsMatching = /\.[0-9a-f]{8}\./;
+	// exclude = [/\.map$/, /asset-manifest\.json$/, /LICENSE/];
+
+	plop.setGenerator('progressiveWebApp', {
+		description: 'Add required files for progressive web app',
+		prompts: [],
+		actions: [
+			{
+				type: 'add',
+				path: `${rootDirectory}/serviceWorker/swSource.ts`,
+				templateFile: 'generatorTemplates/progressiveWebApp/swSource.ts.hbs',
+			},
+			{
+				type: 'add',
+				path: `${rootDirectory}/serviceWorker/swRegistration.ts`,
+				templateFile: 'generatorTemplates/progressiveWebApp/swRegistration.ts.hbs',
+			},
+			{
+				type: 'add',
+				path: `${publicDirectory}/manifest.json`,
+				templateFile: 'generatorTemplates/progressiveWebApp/manifest.json.hbs',
+			},
+			{
+				type: 'append',
+				path: `${publicDirectory}/index.html`,
+				pattern: `<!-- PLOP_INJECT_PWA_META-->`,
+				template: `<link rel="manifest" href="manifest.json" />
+            <meta name="theme-color" content="#ffffff" />
+            <link
+              rel="apple-touch-icon"
+              href="<%= htmlWebpackPlugin.options.meta.url %><%= require('./assets/images/pwa/icon-192x192.png') %>"
+            />`,
+			},
+			{
+				type: 'append',
+				path: `${rootDirectory}/index.tsx`,
+				pattern: `/* PLOP_INJECT_PWA_IMPORTS */`,
+				template: `import registerServiceWorker from './serviceWorker/swRegistration';`,
+			},
+			{
+				type: 'append',
+				path: `${rootDirectory}/index.tsx`,
+				pattern: `/* PLOP_INJECT_PWA_REGISTERER */`,
+				template: `registerServiceWorker();`,
+			},
+			{
+				type: 'append',
+				path: `${buildToolsDirectory}/webpack.prod.js`,
+				pattern: `/* PLOP_INJECT_PWA_IMPORTS */`,
+				template: `{ InjectManifest } = require('workbox-webpack-plugin'),
+        CopyPlugin = require('copy-webpack-plugin'),`,
+			},
+			{
+				type: 'append',
+				path: `${buildToolsDirectory}/webpack.prod.js`,
+				pattern: `/* PLOP_INJECT_PWA_PLUGINS */`,
+				template: `new CopyPlugin({
+        patterns: [
+          { from: 'public/manifest.json', to: '' },
+          { from: 'public/assets/images/pwa', to: 'assets/images/pwa' },
+        ],
+        }),
+        new InjectManifest({
+          //this is the source of your service worker setup
+          swSrc: \`\${PATHS.src}/serviceWorker/swSource\`,
+          dontCacheBustURLsMatching: ${dontCacheBustURLsMatching},         
+          // Bump up the default maximum size (2mb) to (5mb) that's precached,
+          // to make lazy-loading failure scenarios less likely.
+          maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+          //this is the output name of your service worker file
+          swDest: 'serviceWorker.js',
+        }),`,
+			},
+		],
 	});
 };

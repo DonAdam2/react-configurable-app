@@ -1,11 +1,11 @@
 import { MouseEvent, TouchEvent } from 'react';
 
 export const updateObject = <T extends object, U extends object>(
-	oldObject: T,
-	UpdatedValues: U
+  oldObject: T,
+  UpdatedValues: U
 ) => ({
-	...oldObject,
-	...UpdatedValues,
+  ...oldObject,
+  ...UpdatedValues,
 });
 
 export const isTouchEvent = (e: TouchEvent | MouseEvent): e is TouchEvent => e && 'touches' in e;

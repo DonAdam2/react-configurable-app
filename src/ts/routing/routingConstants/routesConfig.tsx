@@ -7,7 +7,7 @@ import CheckoutPage from '../../containers/pages/checkoutPage/CheckoutPage';
 import TimelinePage from '../../containers/pages/timelinePage/TimelinePage';
 
 export const routesConfig = [
-	{ path: getHomePageUrl(), element: <HomePage />, label: 'Home' },
-	{ path: getCheckoutPageUrl(), element: <CheckoutPage />, label: 'Checkout' },
-	{ path: getTimeLinePageUrl(), element: <TimelinePage />, label: 'Timeline' },
+  { path: getHomePageUrl(), element: <HomePage />, label: 'Home' },
+  { path: getCheckoutPageUrl(), element: <CheckoutPage />, label: 'Checkout' },
+  { path: getTimeLinePageUrl(), element: <TimelinePage />, label: 'Timeline' },
 ];

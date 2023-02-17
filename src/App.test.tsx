@@ -4,9 +4,9 @@ import { render, screen } from '@testing-library/react';
 import App from './App';
 
 describe('App Component', () => {
-	test('renders webpack react boilerplate', () => {
-		render(<App />);
-		const title = screen.getByText(/webpack react boilerplate/i);
-		expect(title).toBeInTheDocument();
-	});
+  test('renders webpack react boilerplate', () => {
+    render(<App />);
+    const title = screen.getByText(/webpack react boilerplate/i);
+    expect(title).toBeInTheDocument();
+  });
 });

@@ -1,4 +1,4 @@
 export interface ParallaxInterface {
-	parallaxSpeed?: number;
-	imageUrl?: string;
+  parallaxSpeed?: number;
+  imageUrl?: string;
 }

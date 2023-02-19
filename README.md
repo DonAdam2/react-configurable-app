@@ -24,10 +24,6 @@
 - Install dependencies (required for prettier) => `yarn install`
 - Start the development server => `docker-compose up --build`
 
-## Update environment variables:
-
-Please keep in mind that environment variables configured using webpack which means that you need to re-run the corresponding environment script (yarn start, yarn run build) if you update the environment file.
-
 ## Configuring Prettier
 
 This build relies on [Prettier formatter](https://prettier.io/) to enforce a code style. And [ESLint](https://eslint.org/) for identifying problematic patterns found in JavaScript code.

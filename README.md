@@ -1,19 +1,8 @@
-## This webpack (V5.67.0) boilerplate supports the following:
+### This app shows you how to create a configurable React app (controlled through an object from an API)
 
-- Testing using **jest**, **react-testing-library**
-- **SCSS** preprocessor
-- To enable **CSS modules** (each component has its own styles "no conflict between different components styles") => just open `/buildTools/constants.js` and set **isCssModules** to **true**. Then in every component add the required import as follows: `import classes from './scss/requiredStyles'`
-- Autoprefixer for CSS (it supports IE >= 11)
-- Hot reloading for **JS** & **CSS** and **redux** store (in development)
-- Prettier (for code format)
-- Docker setup for development
-
-## It has the following configuration for React:
-
-- React router dom
-- Redux & Redux thunk & & Redux logger & Redux devTool
-- Prop types
-- 2 environments {production: .env, development: .env.development}
+- You will be able to control the following:
+  - Theme (background color, success color, danger color, text color and typography)
+  - Views (components to show on each page)
 
 ## Prerequisites:
 
@@ -65,27 +54,6 @@ This build relies on [Prettier formatter](https://prettier.io/) to enforce a cod
     b- Search for `prettier` => add `.prettierrc` in **_Prettier: Config Path_** section && check **_Prettier: Require Config_**
 
   3- Please refer to other tutorials if you are using a different IDE.
-
-## Site meta tags:
-
-- This app includes facebook, twitter and regular meta tags
-
-#### To update them:
-
-- Open constants.js file and update metaInfo object
-- Open src/assets/images and replace (favicon.png, metaImage.jpg) with your images but using the same name
-
-## Extra:
-
-- Private route guard => protect the given route based on a token.
-- Restricted route guard => protect the given route based on a token, and a list of permissions (can be an array or a string).
-- Restricted section => protect the given section based on a list of permissions (can be an array or a string).
-- Generic error boundary fallback component (you can customize it)
-- Cookies, local storage and sessions storage mangers to store data in the browser. (**Note:** the data encrypted using crypto-js package before storing it.)
-- Basic mixins `(scss/generic/_mixins.scss)`
-- Normalize styles `(scss/generic/_normalize.scss)`
-- App typography styles `(scss/generic/_typography.scss)`
-- 4 break points `(scss/generic/_variables.scss)`
 
 ## Available Scripts
 

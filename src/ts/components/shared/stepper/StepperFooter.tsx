@@ -32,8 +32,8 @@ const StepperFooter: FC<StepperFooterInterface> = ({
           isLastStep
             ? submitHandler
             : stepperContent[currentTabIndex].clicked
-            ? submitCurrentStep
-            : nextStepHandler
+              ? submitCurrentStep
+              : nextStepHandler
         }
         disabled={
           (isLastStep

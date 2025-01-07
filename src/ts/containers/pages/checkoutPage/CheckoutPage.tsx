@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, JSX, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 //selectors

@@ -1,9 +1,11 @@
-@import '../../../../scss/generic/variables';
+@use '../../../../scss/generic/variables' as vars;
 
 .accordion-wrapper {
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 1px 4px 0 rgba($black, 0.2), 0 2px 8px 0 rgba($black, 0.19);
+  box-shadow:
+    0 1px 4px 0 rgba(vars.$black, 0.2),
+    0 2px 8px 0 rgba(vars.$black, 0.19);
   margin-bottom: 10px;
   width: 100%;
 
@@ -47,8 +49,8 @@
       }
 
       .accordion-header-icon {
-        transition: transform $duration ease-in-out;
-        fill: $black;
+        transition: transform vars.$duration ease-in-out;
+        fill: vars.$black;
       }
     }
 

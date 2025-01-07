@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, JSX } from 'react';
 import { useSelector } from 'react-redux';
 import { format, addDays } from 'date-fns';
 //selectors

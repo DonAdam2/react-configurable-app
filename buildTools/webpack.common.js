@@ -12,7 +12,7 @@ const path = require('path'),
     isCssModules,
     metaInfo: { title, description, keywords },
   } = require('./constants'),
-  { srcPath, outputSrcPath, jestPath, publicDirPath } = require('./paths');
+  { srcPath, outputSrcPath, publicDirPath } = require('./paths');
 
 module.exports = (env, options) => {
   // the mode variable is passed in package.json scripts (development, production)
@@ -51,7 +51,6 @@ module.exports = (env, options) => {
       extensions: ['.js', '.ts', '.tsx', '.json'],
       // declaring aliases to reduce the use of relative path
       alias: {
-        '@/jest': jestPath,
         '@/ts': `${srcPath}/ts`,
         '@/scss': `${srcPath}/scss`,
         '@/public': publicDirPath,

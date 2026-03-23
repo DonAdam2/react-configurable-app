@@ -7,6 +7,8 @@ import classes from './PageProgressBar.scss';
 const PageProgressBar: FC<PageProgressBarInterface> = ({ backgroundColor, height }) => {
   const [width, setWidth] = useState(0);
 
+  const scrollContainer = () => document.documentElement || document.body;
+
   const showHideScroll = useCallback(() => {
     //scrollTop: is the number of pixels scrolled
     //scrollHeight: is the minimum height required to fit in all its children
@@ -29,8 +31,6 @@ const PageProgressBar: FC<PageProgressBarInterface> = ({ backgroundColor, height
       window.removeEventListener('scroll', showHideScroll);
     };
   }, [showHideScroll]);
-
-  const scrollContainer = () => document.documentElement || document.body;
 
   return (
     <div

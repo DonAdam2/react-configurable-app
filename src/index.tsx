@@ -4,8 +4,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 //import meta image
 import '@/public/assets/images/metaImage.jpg';
-// required for babel polyfills
-import 'regenerator-runtime/runtime';
 //store configuration
 import store from '@/ts/store/store';
 //root component

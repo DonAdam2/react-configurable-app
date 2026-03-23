@@ -16,19 +16,10 @@ module.exports = (api) => {
 
   return {
     presets: [
-      [
-        '@babel/preset-env',
-        {
-          targets: {
-            browsers: ['ie >= 11', 'last 2 versions'],
-          },
-          useBuiltIns: 'entry',
-          corejs: '3',
-        },
-      ],
+      '@babel/preset-env',
       ['@babel/preset-react', { runtime: hasJsxRuntime ? 'automatic' : 'classic' }],
       '@babel/preset-typescript',
     ],
-    plugins: ['@babel/plugin-transform-runtime', '@babel/plugin-syntax-dynamic-import'],
+    plugins: [],
   };
 };

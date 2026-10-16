@@ -15,7 +15,7 @@ const TimelineEntry: FC<PropsWithChildren<TimelineEntryInterface>> = ({
   status,
 }) => {
   const getActivityLogColor = () => {
-    let name = '';
+    let name: string;
 
     switch (status) {
       case 'success':

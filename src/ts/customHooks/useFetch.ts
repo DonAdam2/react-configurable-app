@@ -8,9 +8,7 @@ interface State<T> {
 }
 
 type Action<T> =
-  | { type: 'pending' }
-  | { type: 'resolved'; data: T }
-  | { type: 'rejected'; error: Error };
+  { type: 'pending' } | { type: 'resolved'; data: T } | { type: 'rejected'; error: Error };
 
 const useFetch = <T = unknown>(api: () => AxiosPromise<any>): State<T> => {
   const initialState: State<T> = {
